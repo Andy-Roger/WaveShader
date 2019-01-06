@@ -37,26 +37,16 @@
 			// put more per-instance properties here
 		UNITY_INSTANCING_BUFFER_END(Props)
 
-
 		void vert(inout appdata_full vertexData) {
 
-
 			float3 p = vertexData.vertex.xyz;
-			float k = 2 * UNITY_PI / _Wavelength;
+						
+			p.y = sin(UNITY_PI * ((p.x + _Time.y) / _Wavelength));
+			p.y += sin(UNITY_PI * ((p.z + _Time.y) / _Wavelength));
 
-			float f = k * (p.z - _Speed * _Time.y);
-		    float r = k * (p.x - _Speed * _Time.y);
-			
-			p.x += _Amplitude * cos(f + r);
-			p.y = _Amplitude * sin(f + r);
-
-			float3 tangent = normalize(float3(1 - k * _Amplitude * sin(f), k * _Amplitude * cos(f), 0));
-			float3 normal = float3(-tangent.y, tangent.x, 0);
-			
 			vertexData.vertex.xyz = p;
-			vertexData.normal = normal;
+			//vertexData.normal = normal;
 		}
-
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {
 			// Albedo comes from a texture tinted by color
